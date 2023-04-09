@@ -1,5 +1,5 @@
-vim.o.background = "dark"
-vim.cmd([[colorscheme catppuccin]])
+--vim.o.background = "dark"
+--vim.cmd([[colorscheme catppuccin]])
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.numberwidth = 2

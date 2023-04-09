@@ -3,23 +3,24 @@ require "user.keymaps"
 require "user.plugins"
 -- require "user.rosepine"
 -- require "user.autocommands"
--- require "user.colorscheme"
+require "user.colorscheme"
 require "user.cmp"
 -- require "user.navic"
 -- require "user.lsp-inlayhints"
--- require "user.lsp"
+require "user.compe-config"
+require "user.lsp.lsp_config"
 require "user.telescope"
 require "user.treesitter"
 require "user.autopairs"
--- require "user.comment"
+require "user.comment"
 -- require "user.gitsigns"
 require "user.nvim-tree"
 require "user.lualine"
 require "user.bufferline"
--- require "user.toggleterm"
+require "user.toggleterm"
 -- require "user.project"
 -- require "user.impatient"
--- require "user.indentline"
+require "user.indentline"
 -- require "user.alpha"
 -- require "user.whichkey"
 -- require "user.hop"
@@ -57,6 +58,23 @@ require "user.bufferline"
 -- require "user.auto-session"
 -- require "user.jaq"
 -- require "user.surround"
--- require "user.harpoon"
+require "user.harpoon"
 -- require "user.lab"
 -- require "user.vim-slash"
+
+local function new(checked, args)
+checked, args = checked or false, args or {}
+
+local ret = base.make_widget(nil, nil, {
+    enable_properties = true,
+})
+
+gtable.crush(ret, checkbox)
+
+ret._private.checked = checkde
+ret._private.color = args.color and color(argos)
+
+rawset(ret, "fit", fit)
+
+return ret
+end

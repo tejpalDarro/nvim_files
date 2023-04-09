@@ -55,10 +55,10 @@ return packer.startup(function(use)
   -- -- use "folke/lua-dev.nvim"
 
   -- -- LSP
-  -- use "neovim/nvim-lspconfig" -- enable LSP
+  use "neovim/nvim-lspconfig" -- enable LSP
   -- -- use "williamboman/nvim-lsp-installer" -- simple to use language server installer
-  -- use "williamboman/mason.nvim"
-  -- use "williamboman/mason-lspconfig.nvim"
+  use "williamboman/mason.nvim"
+  use "williamboman/mason-lspconfig.nvim"
   -- use "jose-elias-alvarez/null-ls.nvim" -- for formatters and linters
   -- use "ray-x/lsp_signature.nvim"
   -- use "SmiteshP/nvim-navic"
@@ -88,10 +88,11 @@ return packer.startup(function(use)
   use "hrsh7th/cmp-buffer" -- buffer completions
   use "hrsh7th/cmp-path" -- path completions
   use "hrsh7th/cmp-cmdline" -- cmdline completions
-  -- use "saadparwaiz1/cmp_luasnip" -- snippet completions
-  -- use "hrsh7th/cmp-nvim-lsp"
-  -- use "hrsh7th/cmp-emoji"
-  -- use "hrsh7th/cmp-nvim-lua"
+  use "saadparwaiz1/cmp_luasnip" -- snippet completions
+  use "hrsh7th/cmp-nvim-lsp"
+  use "hrsh7th/cmp-emoji"
+  use "hrsh7th/cmp-nvim-lua"
+  use "hrsh7th/nvim-compe"
 --   use "zbirenbaum/copilot-cmp"
 --   use { "tzachar/cmp-tabnine", commit = "1a8fd2795e4317fd564da269cc64a2fa17ee854e", 
 -- run = "./install.sh" }
@@ -116,8 +117,8 @@ return packer.startup(function(use)
   -- }
 
   -- Marks
-  -- use "christianchiarulli/harpoon"
-  -- use "MattesGroeger/vim-bookmarks"
+   use "christianchiarulli/harpoon"
+   use "MattesGroeger/vim-bookmarks"
 
   -- Fuzzy Finder/Telescope
   use "nvim-telescope/telescope.nvim"
@@ -133,6 +134,7 @@ return packer.startup(function(use)
   -- use "nvim-colortils/colortils.nvim"
 
   -- Colorschemes
+  use 'Mofiqul/dracula.nvim'
   use "rebelot/kanagawa.nvim"
   use "EdenEast/nightfox.nvim" -- Packer 
   use "lunarvim/onedarker.nvim"
@@ -181,15 +183,15 @@ use { "catppuccin/nvim", as = "catppuccin" }
   -- use "goolord/alpha-nvim"
 
   -- Indent
-  -- use "lukas-reineke/indent-blankline.nvim"
+  use "lukas-reineke/indent-blankline.nvim"
 
   -- File Explorer
   use "kyazdani42/nvim-tree.lua"
   -- use "christianchiarulli/lir.nvim"
 
   -- Comment
-  -- use "numToStr/Comment.nvim"
-  -- use "folke/todo-comments.nvim"
+   use "numToStr/Comment.nvim"
+   use "folke/todo-comments.nvim"
 
   -- Terminal
   use "akinsho/toggleterm.nvim"
