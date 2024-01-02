@@ -1,0 +1,196 @@
+---@diagnostic disable: undefined-global
+local lsp = vim.lsp
+local diagnostic = vim.diagnostic
+local fn = vim.fn
+require("mason").setup()
+require("mason-lspconfig").setup({
+    ensured_install = {"lua_ls", "rust_analyzer", "jdtls", "typescript-language-server", "gopls", "tsserver"}
+})
+
+local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")
+if not lspconfig_status_ok then
+  return
+end
+
+local on_attach = function(client, bufnr)
+  --Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+ --Mappings.
+  --See `:help vim.lsp.*` for documentation on any of the below functions
+  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', 'rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+end
+
+-- vim.diagnostic.config({
+--   virtual_text = false, -- Turn off inline diagnostics
+-- })
+-- 300ms of no cursor movement to trigger CursorHold
+vim.opt.updatetime = 100
+
+-- Show diagnostic popup on cursor hover
+local diag_float_grp = vim.api.nvim_create_augroup("DiagnosticFloat", { clear = true })
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+   vim.diagnostic.open_float(nil, { focusable = false })
+  end,
+  group = diag_float_grp,
+})
+
+-- Goto previous/next diagnostic warning/error
+vim.keymap.set("n", "g[", vim.diagnostic.goto_prev, keymap_opts)
+vim.keymap.set("n", "g]", vim.diagnostic.goto_next, keymap_opts)
+
+-- Use this if you want it to automatically show all diagnostics on the
+-- current line in a floating window. Personally, I find this a bit
+-- distracting and prefer to manually trigger it (see below). The
+-- CursorHold event happens when after `updatetime` milliseconds. The
+-- default is 4000 which is much too long
+
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+require("lspconfig").jsonls.setup {
+    on_attach = on_attach;
+    capabilities = capabilities,
+}
+-- require("lspconfig").bashls.setup {
+--     on_attach = on_attach;
+--     capabilities = capabilities,
+-- }
+require("lspconfig").lua_ls.setup {
+    on_attach = on_attach;
+    capabilities = capabilities,
+}
+require("lspconfig").tsserver.setup {
+    on_attach = on_attach;
+    capabilities = capabilities;
+}
+require("lspconfig").cssls.setup {
+    on_attach = on_attach;
+    capabilities = capabilities,
+}
+require("lspconfig").html.setup {
+    on_attach = on_attach;
+    capabilities = capabilities;
+}
+require("lspconfig").marksman.setup {
+    on_attach = on_attach;
+    capabilities = capabilities;
+}
+-- require("lspconfig").csharp_ls.setup {
+--     on_attach = on_attach;
+--     capabilities = capabilities;
+-- }
+-- require("lspconfig").rust_analyzer.setup {
+--     on_attach = on_attach;
+--     capabilities = capabilities,
+-- }
+-- require'lspconfig'.jdtls.setup{
+-- }
+
+--require("lspconfig").jdtls.setup {
+--    on_attach = on_attach;
+--    capabilities = capabilities,
+--}
+
+require("lspconfig").tsserver.setup {
+    on_attach = on_attach;
+    capabilities = capabilities,
+}
+lspconfig['gopls'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    gopls = {
+      analyses = {
+        assign = true,
+        atomic = true,
+        bools = true,
+        composites = true,
+        copylocks = true,
+        deepequalerrors = true,
+        embed = true,
+        errorsas = true,
+        fieldalignment = true,
+        httpresponse = true,
+        ifaceassert = true,
+        loopclosure = true,
+        lostcancel = true,
+        nilfunc = true,
+        nilness = true,
+        nonewvars = true,
+        printf = true,
+        shadow = true,
+        shift = true,
+        simplifycompositelit = true,
+        simplifyrange = true,
+        simplifyslice = true,
+        sortslice = true,
+        stdmethods = true,
+        stringintconv = true,
+        structtag = true,
+        testinggoroutine = true,
+        tests = true,
+        timeformat = true,
+        unmarshal = true,
+        unreachable = true,
+        unsafeptr = true,
+        unusedparams = true,
+        unusedresult = true,
+        unusedvariable = true,
+        unusedwrite = true,
+        useany = true,
+      },
+      completeUnimported = true,
+      hoverKind = "FullDocumentation",
+      linkTarget = "pkg.go.dev",
+      usePlaceholders = true,
+      vulncheck = "Imports",
+    },
+  },
+}
+
+-- Change diagnostic signs.
+fn.sign_define("DiagnosticSignError", { text = "✗", texthl = "DiagnosticSignError" })
+fn.sign_define("DiagnosticSignWarn", { text = "!", texthl = "DiagnosticSignWarn" })
+fn.sign_define("DiagnosticSignInformation", { text = "", texthl = "DiagnosticSignInfo" })
+fn.sign_define("DiagnosticSignHint", { text = "", texthl = "DiagnosticSignHint" })
+
+-- global config for diagnostic
+-- diagnostic.config {
+--   underline = false,
+--   virtual_text = false,
+--   signs = true,
+--   severity_sort = true,
+-- }
+--
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    -- Enable underline, use default values
+    underline = true,
+    -- Enable virtual text, override spacing to 4
+    virtual_text = {
+      spacing = 4,
+    },
+    -- Use a function to dynamically turn signs off
+    -- and on, using buffer local variables
+    signs = function(namespace, bufnr)
+      return vim.b[bufnr].show_signs == true
+    end,
+    -- Disable a feature
+    update_in_insert = false,
+  }
+)
+
+
+lsp.handlers["textDocument/hover"] = lsp.with(vim.lsp.handlers.hover, {
+  border = "rounded",
+})
